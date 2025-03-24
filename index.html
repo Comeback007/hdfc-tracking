@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HDFC Bank Fixed Deposit Tracker</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #cfeafa;
+            margin: 0;
+            padding-top: 70px;
+            text-align: center;
+        }
+        .header {
+            background: #0056b3;
+            color: white;
+            width: 100%;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 15px;
+            padding-bottom: 15px;
+        }
+        .header img {
+            height: 40px;
+        }
+        .profile {
+            background: white;
+            color: #0056b3;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+        h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+        input {
+            width: 100%;
+            margin: 10px 0;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .tracking-details {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 5px solid #007bff;
+            border-radius: 5px;
+            font-size: 16px;
+            color: #333;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        .terms {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #666;
+            background: #fff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <img src="logo.jpg" alt="HDFC Bank Logo">
+        <span>HDFC Bank Fixed Deposit Tracker</span>
+        <span id="profile" class="profile" style="display: none;"></span>
+    </div>
+    <div class="container" id="trackingForm">
+        <h2>Track Your FD</h2>
+        <input type="text" id="trackingId" placeholder="Enter Tracking ID">
+        <input type="password" id="password" placeholder="Enter Password">
+        <button id="trackButton">Track</button>
+    </div>
+    <div id="trackingDetails" class="tracking-details"></div>
+    <div id="terms" class="terms" style="display: none;">
+        <strong>Terms & Conditions:</strong>
+        <ul>
+            <li>Closure requests must be submitted through the bank's official channels at the branch mentioned in the fixed deposit bond.</li>
+            <li>Premature withdrawal may lead to penalties.</li>
+            <<li>The person in whose name the FD is registered or the nominee must be physically present for the closure process.</li>
+            <li>Maturity proceeds will be credited to the registered bank account.</li>
+        </ul>
+    </div>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("trackButton").addEventListener("click", checkTracking);
+        });
+        const trackingData = {
+            "VD/6965090": { password: "03101993", details: `
+                <table>
+                    <tr><th colspan="2">Personal Data</th></tr>
+                    <tr><td>Name</td><td>Anubhav Verma</td></tr>
+                    <tr><td>Mobile No</td><td>7007734625</td></tr>
+                    <tr><td>PAN</td><td>APOPV0649F</td></tr>
+                    <tr><th colspan="2">Deposit Details</th></tr>
+                    <tr><td>Deposit No</td><td>VD/6965090</td></tr>
+                    <tr><td>Deposit Date</td><td>23-Mar-2025</td></tr>
+                    <tr><td>Maturity Date</td><td>23-Mar-2045</td></tr>
+                    <tr><td>Deposit Amount</td><td>₹4,00,000</td></tr>
+                    <tr><td>Maturity Amount till now</td><td>₹4,00,000</td></tr>
+                    <tr><td>Maturity Amount</td><td>₹1,16,44,520.86</td></tr>
+                    <tr><td>Branch Address</td><td>No H, 1/A/12, Sector 63 Rd, H Block, Sector 63, Noida, Uttar Pradesh 201306</td></tr>
+                    <tr><th colspan="2">Bank Details</th></tr>
+                    <tr><td>Bank Name</td><td>State Bank Of India</td></tr>
+                    <tr><td>Branch</td><td>Lakhimpur Kheri</td></tr>
+                    <tr><td>Account No</td><td>35227104210</td></tr>
+                    <tr><td>IFSC Code</td><td>SBIN0000673</td></tr>
+                </table>
+            ` }
+        };
+        function checkTracking() {
+            const trackingId = document.getElementById("trackingId").value.trim();
+            const password = document.getElementById("password").value.trim();
+            const detailsDiv = document.getElementById("trackingDetails");
+            const profileDiv = document.getElementById("profile");
+            const trackingForm = document.getElementById("trackingForm");
+            const termsDiv = document.getElementById("terms");
+            if (trackingData[trackingId] && trackingData[trackingId].password === password) {
+                trackingForm.style.display = "none";
+                detailsDiv.style.display = "block";
+                detailsDiv.innerHTML = trackingData[trackingId].details;
+                profileDiv.style.display = "inline-block";
+                profileDiv.innerHTML = "Anubhav Verma";
+                termsDiv.style.display = "block";
+            } else {
+                alert("Invalid Tracking ID or Password");
+            }
+        }
+    </script>
+</body>
+</html>
